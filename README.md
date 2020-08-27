@@ -6,10 +6,6 @@ I reversed engineered the compression format myself back in the day, but as much
 ## Requirements
 This library is written in C# compatible with .NET Standard 2.0 specification, so it is usable in multiple platforms like desktops and phones.
 
-## Changelog
-### [1.0.0] - 2020-08-28
-- Initial release.
-
 # Mario Party Tools
 It is a simple command line program that allows you to decompress or compress a file by using the Mario Party Compression Libray.
 
@@ -34,6 +30,6 @@ MarioPartyTools -b -r<rom_region> <rom_file>              :  Execute some benchm
               and -rJ for the NTSC-J version.
 ```
 
-## Changelog
+# Changelog
 ### [1.0.0] - 2020-08-28
 - Initial release.
