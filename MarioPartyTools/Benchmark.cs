@@ -7,10 +7,33 @@ namespace MarioPartyTools
 {
     static class Benchmark
     {
-        public enum RomRegions { NtscU, Pal, NtscJ }
-
-        public static void Start(string romFilePath, RomRegions romRegion)
+        static readonly byte[][] RomCRCs =
         {
+            new byte[] { 0xad, 0xa8, 0x15, 0xbe, 0x60, 0x28, 0x62, 0x2f }, // NTSC-J
+            new byte[] { 0x28, 0x29, 0x65, 0x7e, 0xa0, 0x62, 0x18, 0x77 }, // NTSC-U
+            new byte[] { 0x9c, 0x66, 0x30, 0x69, 0x80, 0xf2, 0x4a, 0x80 }  // PAL
+        };
+
+        static readonly RomData[] romData =
+        {
+            new RomData() { startPosition = 0x31ba80, endPosition = 0xfb47a0 }, // NTSC-J
+            new RomData() { startPosition = 0x31c7e0, endPosition = 0xfcb860 }, // NTSC-U
+            new RomData() { startPosition = 0x3373c0, endPosition = 0xff0850 }  // PAL
+        };
+
+        struct RomData
+        {
+            public uint startPosition;
+            public uint endPosition;
+        }
+
+        public static void Start(string romFilePath)
+        {
+            if (string.IsNullOrEmpty(romFilePath))
+            {
+                throw new ArgumentNullException("romFilePath");
+            }
+
             if (!File.Exists(romFilePath))
             {
                 throw new FileNotFoundException($"File \"{romFilePath}\" does not exist!", romFilePath);
@@ -19,31 +42,43 @@ namespace MarioPartyTools
             float compressionRatio = 0f;
             int processedFiles = 0;
             Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            uint dataStartPosition;
-            uint dataEndPosition;
-
-            if (romRegion == RomRegions.NtscU)
-            {
-                dataStartPosition = 0x31c7e0;
-                dataEndPosition = 0xfcb860;
-            }
-            else if (romRegion == RomRegions.Pal)
-            {
-                dataStartPosition = 0x3373c0;
-                dataEndPosition = 0xff0850;
-            }
-            else
-            {
-                dataStartPosition = 0x31ba80;
-                dataEndPosition = 0xfb47a0;
-            }
 
             using (FileStream romStream = File.OpenRead(romFilePath))
             using (BinaryReader br = new BinaryReader(romStream))
             {
-                romStream.Seek(dataStartPosition, SeekOrigin.Begin);
+                // Check if it is a valid ROM
+
+                romStream.Seek(0x10, SeekOrigin.Begin);
+                byte[] romCRC = new byte[0x8];
+                romStream.Read(romCRC, 0, romCRC.Length);
+                byte[] swappedRomCRC = SwapCRCBytes(romCRC);
+
+                int romRegion = -1;
+
+                for (int r = 0; r < RomCRCs.Length; r++)
+                {
+                    if (CompareArrays(RomCRCs[r], swappedRomCRC))
+                    {
+                        throw new FormatException("The Mario Party ROM has swapped data. Please unswap it using another tool first.");
+                    }
+
+                    if (CompareArrays(RomCRCs[r], romCRC))
+                    {
+                        romRegion = r;
+                        break;
+                    }
+                }
+
+                if (romRegion < 0)
+                {
+                    throw new FormatException("The file is not a Mario Party ROM for N64. Please make sure you've specified the correct game.");
+                }
+
+                // Start reading the ROM data
+
+                sw.Start();
+
+                romStream.Seek(romData[romRegion].startPosition, SeekOrigin.Begin);
 
                 uint fileCount = SwapU32(br.ReadUInt32());
                 uint[] filePointers = new uint[fileCount];
@@ -55,7 +90,7 @@ namespace MarioPartyTools
 
                 for (int f = 0; f < fileCount; f++)
                 {
-                    romStream.Seek(filePointers[f] + dataStartPosition, SeekOrigin.Begin);
+                    romStream.Seek(filePointers[f] + romData[romRegion].startPosition, SeekOrigin.Begin);
 
                     uint subFileCount = SwapU32(br.ReadUInt32());
                     uint[] subFilePointers = new uint[subFileCount];
@@ -76,12 +111,12 @@ namespace MarioPartyTools
                         else
                         {
                             if (f < fileCount - 1)
-                                subFileLength = (filePointers[f + 1] + dataStartPosition) - (filePointers[f] + subFilePointers[sf] + dataStartPosition);
+                                subFileLength = (filePointers[f + 1] + romData[romRegion].startPosition) - (filePointers[f] + subFilePointers[sf] + romData[romRegion].startPosition);
                             else
-                                subFileLength = dataEndPosition - (filePointers[f] + subFilePointers[sf] + dataStartPosition);
+                                subFileLength = romData[romRegion].endPosition - (filePointers[f] + subFilePointers[sf] + romData[romRegion].startPosition);
                         }
 
-                        uint subFilePosition = filePointers[f] + subFilePointers[sf] + dataStartPosition;
+                        uint subFilePosition = filePointers[f] + subFilePointers[sf] + romData[romRegion].startPosition;
                         romStream.Seek(subFilePosition, SeekOrigin.Begin);
                         byte[] data = new byte[subFileLength];
                         romStream.Read(data, 0, data.Length);
@@ -101,7 +136,7 @@ namespace MarioPartyTools
             compressionRatio /= processedFiles;
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\nDone! Compression ratio: {compressionRatio}. Total time: {sw.ElapsedMilliseconds}ms.\n");
+            Console.WriteLine($"\nProcess finished! Compression ratio average: {compressionRatio}. Elapsed time: {sw.ElapsedMilliseconds}ms.\n");
         }
 
         static bool ProcessFile(byte[] compressedBuffer, uint offset, out float compressionRatio)
@@ -109,7 +144,7 @@ namespace MarioPartyTools
             compressionRatio = 0f;
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"Processing data at 0x{offset:X8}...");
+            Console.Write($"Processing data at 0x{offset:X8}... ");
 
             byte[] uncompressedBuffer;
 
@@ -120,7 +155,7 @@ namespace MarioPartyTools
             catch (FormatException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Error processing data at 0x{offset:X8}: {ex.Message}");
+                Console.WriteLine(ex.Message);
                 return false;
             }
 
@@ -131,11 +166,14 @@ namespace MarioPartyTools
             if (!areEqual)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Data at 0x{offset:X8} decompression mismatch...");
+                Console.WriteLine("Decompression mismatch.");
                 return false;
             }
 
-            compressionRatio = (float)compressedBuffer.Length / compressedBuffer2.Length;
+            compressionRatio = (float)compressedBuffer2.Length / compressedBuffer.Length;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Done! Compression ratio: {compressionRatio}");
 
             return true;
         }
@@ -150,6 +188,24 @@ namespace MarioPartyTools
             }
 
             return true;
+        }
+
+        static byte[] SwapCRCBytes(byte[] bytes)
+        {
+            if (bytes.Length != 8)
+            {
+                throw new ArgumentException("The bytes array must have 8 elements.", "bytes");
+            }
+
+            byte[] swappedBytes = new byte[8];
+
+            for (int b = 0; b < bytes.Length; b += 2)
+            {
+                swappedBytes[b] = bytes[b + 1];
+                swappedBytes[b + 1] = bytes[b];
+            }
+
+            return swappedBytes;
         }
 
         static uint SwapU32(uint value)

@@ -18,18 +18,19 @@ The program requires the .NET Framework 4.7.2.
 ```
 MarioPartyTools -d <compressed_file> <uncompressed_file>  :  Decompress a Mario Party file
 MarioPartyTools -c <uncompressed_file> <compressed_file>  :  Compress a Mario Party file
-MarioPartyTools -b -r<rom_region> <rom_file>              :  Execute some benchmarks and tests
+MarioPartyTools -b <rom_file>                             :  Execute some benchmarks and tests
 
   The benchmark command will try to decompress and recompress all compressed data
   in a Mario Party ROM, show the compression ratio compared to the original data,
   check if there are compression errors, and show how much it took to do all that.
   Also make sure that the ROM is not swapped, or else the process will fail.
-
-  rom_region: the benchmark is compatible with all versions of Mario Party.
-              Use -rP to specify the PAL version, -rU for the NTSC-U version,
-              and -rJ for the NTSC-J version.
 ```
 
 # Changelog
+### [1.0.1] - 2020-08-28
+- Added some safety checks and error messages.
+- Benchmark auto detects the region of the game.
+- Benchmark improvements in the way data is shown in the console.
+
 ### [1.0.0] - 2020-08-28
 - Initial release.

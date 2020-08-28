@@ -17,6 +17,16 @@ namespace MarioPartyCompression
         /// <param name="outputFilePath">Path where the uncompressed data will be saved.</param>
         public static void Decompress(string inputFilePath, string outputFilePath)
         {
+            if (string.IsNullOrEmpty(inputFilePath))
+            {
+                throw new ArgumentNullException("inputFilePath");
+            }
+
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                throw new ArgumentNullException("outputFilePath");
+            }
+
             if (!File.Exists(inputFilePath))
             {
                 throw new FileNotFoundException($"File \"{inputFilePath}\" does not exist!", inputFilePath);
@@ -36,6 +46,11 @@ namespace MarioPartyCompression
         /// <returns>The uncompressed data buffer.</returns>
         public static byte[] Decompress(byte[] compressedBuffer)
         {
+            if (compressedBuffer == null)
+            {
+                throw new ArgumentNullException("compressedBuffer");
+            }
+
             using (MemoryStream compressedStream = new MemoryStream(compressedBuffer))
             {
                 return Decompress(compressedStream);
@@ -49,6 +64,11 @@ namespace MarioPartyCompression
         /// <returns>The uncompressed data buffer.</returns>
         public static byte[] Decompress(Stream compressedStream)
         {
+            if (compressedStream == null)
+            {
+                throw new ArgumentNullException("compressedStream");
+            }
+
             byte[] uncompressedBuffer;
 
             using (BinaryReader br = new BinaryReader(compressedStream, Encoding.UTF8, true))
@@ -141,6 +161,16 @@ namespace MarioPartyCompression
         /// <param name="outputFilePath">Path where the compressed data will be saved.</param>
         public static void Compress(string inputFilePath, string outputFilePath)
         {
+            if (string.IsNullOrEmpty(inputFilePath))
+            {
+                throw new ArgumentNullException("inputFilePath");
+            }
+
+            if (string.IsNullOrEmpty(outputFilePath))
+            {
+                throw new ArgumentNullException("outputFilePath");
+            }
+
             if (!File.Exists(inputFilePath))
             {
                 throw new FileNotFoundException($"File \"{inputFilePath}\" does not exist!", inputFilePath);
@@ -160,6 +190,11 @@ namespace MarioPartyCompression
         /// <returns>The compressed data buffer.</returns>
         public static byte[] Compress(byte[] uncompressedBuffer)
         {
+            if (uncompressedBuffer == null)
+            {
+                throw new ArgumentNullException("uncompressedBuffer");
+            }
+
             using (MemoryStream compressedStream = new MemoryStream(uncompressedBuffer))
             {
                 return Compress(compressedStream);
@@ -173,6 +208,11 @@ namespace MarioPartyCompression
         /// <returns>The compressed data buffer.</returns>
         public static byte[] Compress(Stream uncompressedStream)
         {
+            if (uncompressedStream == null)
+            {
+                throw new ArgumentNullException("uncompressedStream");
+            }
+
             // Create a buffer big enough to contain the search window (SEARCH_WINDOW_SIZE) and the uncompressed data
             byte[] uncompressedBuffer = new byte[uncompressedStream.Length + SEARCH_WINDOW_SIZE];
             uint uncompressedBufferPosition = SEARCH_WINDOW_SIZE;

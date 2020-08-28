@@ -10,7 +10,26 @@ namespace MarioPartyTools
         {
             ShowHeader();
 
-            if (args.Length == 3)
+            if (args.Length == 2)
+            {
+                if (args[0] == "-b")
+                {
+                    try
+                    {
+                        Benchmark.Start(args[1]);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                else
+                {
+                    ShowUsage();
+                }
+            }
+            else if (args.Length == 3)
             {
                 if (args[0] == "-d")
                 {
@@ -40,25 +59,6 @@ namespace MarioPartyTools
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(ex.Message);
-                    }
-                }
-                else if (args[0] == "-b")
-                {
-                    if (args[1] == "-rU")
-                    {
-                        Benchmark.Start(args[2], Benchmark.RomRegions.NtscU);
-                    }
-                    else if (args[1] == "-rP")
-                    {
-                        Benchmark.Start(args[2], Benchmark.RomRegions.Pal);
-                    }
-                    else if (args[1] == "-rJ")
-                    {
-                        Benchmark.Start(args[2], Benchmark.RomRegions.NtscJ);
-                    }
-                    else
-                    {
-                        ShowUsage();
                     }
                 }
                 else
@@ -106,7 +106,7 @@ namespace MarioPartyTools
 
             Console.WriteLine("  MarioPartyTools -d <compressed_file> <uncompressed_file>  :  Decompress a Mario Party file");
             Console.WriteLine("  MarioPartyTools -c <uncompressed_file> <compressed_file>  :  Compress a Mario Party file");
-            Console.WriteLine("  MarioPartyTools -b -r<rom_region> <rom_file>              :  Execute some benchmarks and tests\n");
+            Console.WriteLine("  MarioPartyTools -b <rom_file>                             :  Execute some benchmarks and tests\n");
 
             Console.ForegroundColor = ConsoleColor.Gray;
 
@@ -114,10 +114,6 @@ namespace MarioPartyTools
             Console.WriteLine("    in a Mario Party ROM, show the compression ratio compared to the original data,");
             Console.WriteLine("    check if there are compression errors, and show how much it took to do all that.");
             Console.WriteLine("    Also make sure that the ROM is not swapped, or else the process will fail.\n");
-
-            Console.WriteLine("    rom_region: the benchmark is compatible with all versions of Mario Party.");
-            Console.WriteLine("                Use -rP to specify the PAL version, -rU for the NTSC-U version,");
-            Console.WriteLine("                and -rJ for the NTSC-J version.\n");
         }
     }
 }
