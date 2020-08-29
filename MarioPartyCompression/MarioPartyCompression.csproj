@@ -5,9 +5,9 @@
     <Authors>PacoChan</Authors>
     <Product>Mario Party Compression Library</Product>
     <Description>A Mario Party compression library.</Description>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.0.1</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/MaikelChan/MarioPartyCompression</RepositoryUrl>
   </PropertyGroup>

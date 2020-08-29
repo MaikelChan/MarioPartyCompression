@@ -77,7 +77,7 @@ namespace MarioPartyCompression
 
                 if (Utils.SwapU32(br.ReadUInt32()) != 0x1)
                 {
-                    throw new FormatException("This is not a valid Mario Party compressed data.");
+                    throw new InvalidDataException("This is not a valid Mario Party compressed data.");
                 }
 
                 uncompressedBuffer = new byte[uncompressedLength];
@@ -134,10 +134,10 @@ namespace MarioPartyCompression
 
                     if (compressedStream.Position >= compressedStream.Length && uncompressedBufferPosition < uncompressedLength)
                     {
-                        throw new FormatException("Reached the end of the compressed data prematurely.");
+                        throw new EndOfStreamException("Reached the end of the compressed data prematurely.");
                     }
 
-                    if (uncompressedBufferPosition >= uncompressedLength/* || fs1.Position >= fs1.Length*/)
+                    if (uncompressedBufferPosition >= uncompressedLength)
                     {
                         // End of file
                         break;
