@@ -14,38 +14,93 @@ namespace MarioPartyTools
 
         public struct Info
         {
+            public string regionName;
             public byte[] crc;
             public uint dataStartPosition;
             public uint dataEndPosition;
-            public uint textsStartPointerOpcode1Position;
-            public uint textsStartPointerOpcode2Position;
+            //public uint textsStartPointerOpcode1Position;
+            //public uint textsStartPointerOpcode2Position;
+            public uint numberOfTexts;
+            public Language[] languages;
         }
 
-        public static readonly Info[] info =
+        public struct Language
         {
-            new Info() // NTSC-J
+            public string languageName;
+            public uint textsStartPosition;
+            public uint textsEndPosition;
+        }
+
+        static readonly Info[] info =
+        {
+            new Info()
             {
+                regionName = "NTSC-J",
                 crc = new byte[] { 0xad, 0xa8, 0x15, 0xbe, 0x60, 0x28, 0x62, 0x2f },
                 dataStartPosition = 0x31ba80,
                 dataEndPosition = 0xfb47a0,
-                textsStartPointerOpcode1Position = 0x1ad9c, // Pointer to texts is hardcoded in two opcodes
-                textsStartPointerOpcode2Position = 0x1ada4
+                //textsStartPointerOpcode1Position = 0x1ad9c, // Pointer to texts is hardcoded in two opcodes
+                //textsStartPointerOpcode2Position = 0x1ada4,
+                numberOfTexts = 0x52C,
+                languages = new Language[]
+                {
+                    new Language()
+                    {
+                        languageName = "Japanese",
+                        textsStartPosition = 0xfb47a0,
+                        textsEndPosition = 0xfc4930
+                    }
+                }
             },
-            new Info() // NTSC-U
+            new Info()
             {
+                regionName = "NTSC-U",
                 crc = new byte[] { 0x28, 0x29, 0x65, 0x7e, 0xa0, 0x62, 0x18, 0x77 },
                 dataStartPosition = 0x31c7e0,
                 dataEndPosition = 0xfcb860,
-                textsStartPointerOpcode1Position = 0x1ae6c,
-                textsStartPointerOpcode2Position = 0x1ae74
+                //textsStartPointerOpcode1Position = 0x1ae6c,
+                //textsStartPointerOpcode2Position = 0x1ae74,
+                numberOfTexts = 0x52F,
+                languages = new Language[]
+                {
+                    new Language()
+                    {
+                        languageName = "English",
+                        textsStartPosition = 0xfcb860,
+                        textsEndPosition = 0xfe2310
+                    }
+                }
             },
-            new Info() // PAL
+            new Info()
             {
+                regionName = "PAL",
                 crc = new byte[] { 0x9c, 0x66, 0x30, 0x69, 0x80, 0xf2, 0x4a, 0x80 },
                 dataStartPosition = 0x3373c0,
                 dataEndPosition = 0xff0850,
-                textsStartPointerOpcode1Position = 0x1ba30,
-                textsStartPointerOpcode2Position = 0x1ba34
+                //textsStartPointerOpcode1Position = 0x1ba30,
+                //textsStartPointerOpcode2Position = 0x1ba34,
+                numberOfTexts = 0x52F,
+                languages = new Language[]
+                {
+                    new Language()
+                    {
+                        languageName = "English",
+                        textsStartPosition = 0xff0850,
+                        textsEndPosition = 0x1007310
+                    },
+                    new Language()
+                    {
+                        languageName = "German",
+                        textsStartPosition = 0x1007310,
+                        textsEndPosition = 0x101f110
+                    },
+                    new Language()
+                    {
+                        languageName = "French",
+                        textsStartPosition = 0x101f110,
+                        textsEndPosition = 0x10357d0
+                    }
+                }
             }
         };
 
@@ -70,6 +125,18 @@ namespace MarioPartyTools
             }
 
             return Types.Invalid;
+        }
+
+        public static Info GetInfo(Stream romStream)
+        {
+            Types type = GetType(romStream);
+
+            if (type == Types.Swapped)
+                throw new InvalidDataException("The Mario Party ROM has swapped data. Please unswap it using another tool first.");
+            else if (type == Types.Invalid)
+                throw new InvalidDataException("The file is not a Mario Party ROM for N64. Please make sure you've specified the correct game.");
+
+            return info[(int)type];
         }
 
         #region Mass Extraction
@@ -113,7 +180,7 @@ namespace MarioPartyTools
                         {
                             uncompressedData = MPCompression.Decompress(fileData);
                         }
-                        catch (FormatException)
+                        catch (InvalidDataException)
                         {
 
                         }
@@ -212,7 +279,7 @@ namespace MarioPartyTools
             {
                 uncompressedBuffer = MPCompression.Decompress(compressedBuffer);
             }
-            catch (FormatException ex)
+            catch (InvalidDataException ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
@@ -249,16 +316,7 @@ namespace MarioPartyTools
 
             using (BinaryReader br = new BinaryReader(romStream, Encoding.UTF8, true))
             {
-                // Check if it is a valid ROM
-
-                Types type = GetType(romStream);
-
-                if (type == Types.Swapped)
-                    throw new FormatException("The Mario Party ROM has swapped data. Please unswap it using another tool first.");
-                else if (type == Types.Invalid)
-                    throw new FormatException("The file is not a Mario Party ROM for N64. Please make sure you've specified the correct game.");
-
-                Info rom = info[(int)type];
+                Info rom = GetInfo(romStream);
 
                 // Start reading the ROM data
 

@@ -40,6 +40,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ROM.cs" />
+    <Compile Include="Texts.cs" />
+    <Compile Include="Table.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
