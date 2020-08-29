@@ -5,33 +5,53 @@ Mario Party Compression is a library that allows you to compress and decompress 
 This library is written in C# compatible with .NET Standard 2.0 specification, so it is usable in multiple platforms like desktops and phones.
 
 # Mario Party Tools
-It is a simple command line program that allows you to decompress or compress a file by using the Mario Party Compression Libray.
-
-It also has a benchmark feature that allows you to check that the compression library works correctly. It will decompress and recompress all compressed data in a *Mario Party* ROM, show the compression ratio compared to the original data, check if there are compression errors, and show how much it takes to do all that. It is compatible with all the versions of the game (NTSC-J, NTSC-U and PAL), but make sure that the ROM doesn't have swapped data, or else the process will fail.
+It is a simple program that allow you to perform several actions to edit *Mario Party* data with the help of Mario Party Compression Library. It is compatible with all the versions of the game (NTSC-J, NTSC-U and PAL), but make sure that the ROM doesn't have swapped data, or else it won't work.
 
 ## Requirements
 The program requires the .NET Framework 4.7.2.
 
 ## Usage
 ```
-MarioPartyTools -d <compressed_file> <uncompressed_file>  :  Decompress a Mario Party file
-MarioPartyTools -c <uncompressed_file> <compressed_file>  :  Compress a Mario Party file
-MarioPartyTools -b <rom_file>                             :  Execute some benchmarks and tests
+MarioPartyTools -d <compressed_file> <uncompressed_file>
 
-  The benchmark command will try to decompress and recompress all compressed data
-  in a Mario Party ROM, show the compression ratio compared to the original data,
-  check if there are compression errors, and show how much it took to do all that.
-  Also make sure that the ROM is not swapped, or else the process will fail.
+  Decompress a Mario Party <compressed_file> and save it into <uncompressed_file>.
+
+
+MarioPartyTools -c <uncompressed_file> <compressed_file>
+
+  Compress a Mario Party <uncompressed_file> and save it into <compressed_file>.
+
+
+MarioPartyTools -et <rom_file> <output_path> <table_file>
+
+  Extract text data from <rom_file> and save it into <output_path>.
+  A <table_file> is needed to make the characters readable.
+
+
+MarioPartyTools -it <input_path> <rom_file> <table_file>
+
+  Insert text data from <input_path> into <rom_file>. A <table_file> is needed
+  to convert back all characters so the game can show them properly.
+
+
+MarioPartyTools -me <rom_file> <output_path>
+
+  Mass extract the main data block of <rom_file> and save all the files
+  into <output_path>.
+
+
+MarioPartyTools -md <rom_file> <output_path>
+
+  Mass extract and decompress the main data block of <rom_file> and save
+  all the files into <output_path>. Uncompressed files will be extracted as is.
+
+
+MarioPartyTools -b <rom_file>
+
+  Test that will try to decompress and recompress all compressed data in <rom_file>,
+  show the compression ratio compared to the original data, check if there are
+  compression errors, and show how much it took to do all that.
 ```
-
-# Changelog
-### [1.0.1] - 2020-08-28
-- Added some safety checks and error messages.
-- Benchmark auto detects the region of the game.
-- Benchmark improvements in the way data is shown in the console.
-
-### [1.0.0] - 2020-08-28
-- Initial release.
 
 # Specification
 Mario Party contains a big data block that contains a lot of interesting stuff, like fonts and textures. This data block is divided into multiple files, which they also contain multiple sub-files each. The position in the ROM of this data block varies between versions of the game. Here's a table:
