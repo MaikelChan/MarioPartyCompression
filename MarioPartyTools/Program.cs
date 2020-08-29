@@ -16,7 +16,7 @@ namespace MarioPartyTools
                 {
                     try
                     {
-                        Benchmark.Start(args[1]);
+                        ROM.Benchmark(args[1]);
                     }
                     catch (Exception ex)
                     {
@@ -54,6 +54,36 @@ namespace MarioPartyTools
 
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Compression process finished successfully.\n");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                else if (args[0] == "-me")
+                {
+                    try
+                    {
+                        ROM.MassExtraction(args[1], args[2], false);
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Mass extraction process finished successfully.\n");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+                else if (args[0] == "-md")
+                {
+                    try
+                    {
+                        ROM.MassExtraction(args[1], args[2], true);
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Mass decompression process finished successfully.\n");
                     }
                     catch (Exception ex)
                     {
@@ -106,6 +136,8 @@ namespace MarioPartyTools
 
             Console.WriteLine("  MarioPartyTools -d <compressed_file> <uncompressed_file>  :  Decompress a Mario Party file");
             Console.WriteLine("  MarioPartyTools -c <uncompressed_file> <compressed_file>  :  Compress a Mario Party file");
+            Console.WriteLine("  MarioPartyTools -me <rom_file> <output_path>              :  Mass extraction of compressed data");
+            Console.WriteLine("  MarioPartyTools -md <rom_file> <output_path>              :  Mass extraction and decompression of data");
             Console.WriteLine("  MarioPartyTools -b <rom_file>                             :  Execute some benchmarks and tests\n");
 
             Console.ForegroundColor = ConsoleColor.Gray;
