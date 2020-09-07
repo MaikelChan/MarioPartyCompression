@@ -145,12 +145,12 @@ namespace MarioPartyTools
         {
             if (string.IsNullOrEmpty(romFilePath))
             {
-                throw new ArgumentNullException("romFilePath");
+                throw new ArgumentNullException(nameof(romFilePath));
             }
 
             if (string.IsNullOrEmpty(outputPath))
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
 
             if (!File.Exists(romFilePath))
@@ -231,7 +231,7 @@ namespace MarioPartyTools
         {
             if (string.IsNullOrEmpty(romFilePath))
             {
-                throw new ArgumentNullException("romFilePath");
+                throw new ArgumentNullException(nameof(romFilePath));
             }
 
             if (!File.Exists(romFilePath))
@@ -311,7 +311,7 @@ namespace MarioPartyTools
         {
             if (romStream == null)
             {
-                throw new ArgumentNullException("romStream");
+                throw new ArgumentNullException(nameof(romStream));
             }
 
             using (BinaryReader br = new BinaryReader(romStream, Encoding.UTF8, true))

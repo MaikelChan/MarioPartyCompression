@@ -19,12 +19,12 @@ namespace MarioPartyCompression
         {
             if (string.IsNullOrEmpty(inputFilePath))
             {
-                throw new ArgumentNullException("inputFilePath");
+                throw new ArgumentNullException(nameof(inputFilePath));
             }
 
             if (string.IsNullOrEmpty(outputFilePath))
             {
-                throw new ArgumentNullException("outputFilePath");
+                throw new ArgumentNullException(nameof(outputFilePath));
             }
 
             if (!File.Exists(inputFilePath))
@@ -48,7 +48,7 @@ namespace MarioPartyCompression
         {
             if (compressedBuffer == null)
             {
-                throw new ArgumentNullException("compressedBuffer");
+                throw new ArgumentNullException(nameof(compressedBuffer));
             }
 
             using (MemoryStream compressedStream = new MemoryStream(compressedBuffer))
@@ -66,7 +66,7 @@ namespace MarioPartyCompression
         {
             if (compressedStream == null)
             {
-                throw new ArgumentNullException("compressedStream");
+                throw new ArgumentNullException(nameof(compressedStream));
             }
 
             byte[] uncompressedBuffer;
@@ -163,12 +163,12 @@ namespace MarioPartyCompression
         {
             if (string.IsNullOrEmpty(inputFilePath))
             {
-                throw new ArgumentNullException("inputFilePath");
+                throw new ArgumentNullException(nameof(inputFilePath));
             }
 
             if (string.IsNullOrEmpty(outputFilePath))
             {
-                throw new ArgumentNullException("outputFilePath");
+                throw new ArgumentNullException(nameof(outputFilePath));
             }
 
             if (!File.Exists(inputFilePath))
@@ -192,7 +192,7 @@ namespace MarioPartyCompression
         {
             if (uncompressedBuffer == null)
             {
-                throw new ArgumentNullException("uncompressedBuffer");
+                throw new ArgumentNullException(nameof(uncompressedBuffer));
             }
 
             using (MemoryStream compressedStream = new MemoryStream(uncompressedBuffer))
@@ -210,7 +210,7 @@ namespace MarioPartyCompression
         {
             if (uncompressedStream == null)
             {
-                throw new ArgumentNullException("uncompressedStream");
+                throw new ArgumentNullException(nameof(uncompressedStream));
             }
 
             // Create a buffer big enough to contain the search window (SEARCH_WINDOW_SIZE) and the uncompressed data

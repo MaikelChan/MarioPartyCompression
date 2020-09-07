@@ -9,7 +9,7 @@ namespace MarioPartyTools
         {
             if (string.IsNullOrEmpty(romFile))
             {
-                throw new ArgumentNullException("romFile");
+                throw new ArgumentNullException(nameof(romFile));
             }
 
             if (!File.Exists(romFile))
@@ -19,12 +19,12 @@ namespace MarioPartyTools
 
             if (string.IsNullOrEmpty(outputPath))
             {
-                throw new ArgumentNullException("outputPath");
+                throw new ArgumentNullException(nameof(outputPath));
             }
 
             if (table == null)
             {
-                throw new ArgumentNullException("table");
+                throw new ArgumentNullException(nameof(table));
             }
 
             if (!Directory.Exists(outputPath)) Directory.CreateDirectory(outputPath);
@@ -74,7 +74,7 @@ namespace MarioPartyTools
         {
             if (string.IsNullOrEmpty(inputPath))
             {
-                throw new ArgumentNullException("inputPath");
+                throw new ArgumentNullException(nameof(inputPath));
             }
 
             if (!Directory.Exists(inputPath))
@@ -84,7 +84,7 @@ namespace MarioPartyTools
 
             if (string.IsNullOrEmpty(romFile))
             {
-                throw new ArgumentNullException("romFile");
+                throw new ArgumentNullException(nameof(romFile));
             }
 
             if (!File.Exists(romFile))
@@ -94,7 +94,7 @@ namespace MarioPartyTools
 
             if (table == null)
             {
-                throw new ArgumentNullException("table");
+                throw new ArgumentNullException(nameof(table));
             }
 
             string[] textFiles = Directory.GetFiles(inputPath, "*.txt");
