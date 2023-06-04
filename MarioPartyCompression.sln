@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30413.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarioPartyCompression", "MarioPartyCompression\MarioPartyCompression.csproj", "{516E2B0A-D4DD-48EB-9FCC-6F6CB39BE972}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarioPartyCompression", "MarioPartyCompression\MarioPartyCompression.csproj", "{516E2B0A-D4DD-48EB-9FCC-6F6CB39BE972}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarioPartyTools", "MarioPartyTools\MarioPartyTools.csproj", "{4771F4D4-4068-41F5-8982-6D5970A2DA0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarioPartyTools", "MarioPartyTools\MarioPartyTools.csproj", "{1E72F040-C0BC-4489-8F78-D252D0CEA67B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{516E2B0A-D4DD-48EB-9FCC-6F6CB39BE972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{516E2B0A-D4DD-48EB-9FCC-6F6CB39BE972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{516E2B0A-D4DD-48EB-9FCC-6F6CB39BE972}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4771F4D4-4068-41F5-8982-6D5970A2DA0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4771F4D4-4068-41F5-8982-6D5970A2DA0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4771F4D4-4068-41F5-8982-6D5970A2DA0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4771F4D4-4068-41F5-8982-6D5970A2DA0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E72F040-C0BC-4489-8F78-D252D0CEA67B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E72F040-C0BC-4489-8F78-D252D0CEA67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E72F040-C0BC-4489-8F78-D252D0CEA67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E72F040-C0BC-4489-8F78-D252D0CEA67B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,7 +8,7 @@ This library is written in C# compatible with .NET Standard 2.0 specification, s
 It is a simple program that allow you to perform several actions to edit *Mario Party* data with the help of Mario Party Compression Library. It is compatible with all the versions of the game (NTSC-J, NTSC-U and PAL), but make sure that the ROM doesn't have swapped data, or else it won't work.
 
 ## Requirements
-The program requires the .NET Framework 4.7.2.
+The program requires the [.NET Desktop Runtime 6](https://dotnet.microsoft.com/download/dotnet/6.0) and it works on Windows, Linux and MacOS.
 
 ## Usage
 ```

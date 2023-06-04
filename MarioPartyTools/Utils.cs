@@ -1,28 +1,27 @@
 ﻿
-namespace MarioPartyTools
+namespace MarioPartyTools;
+
+static class Utils
 {
-    static class Utils
+    public static bool CompareArrays(byte[] arr1, byte[] arr2)
     {
-        public static bool CompareArrays(byte[] arr1, byte[] arr2)
+        if (arr1.Length != arr2.Length) return false;
+
+        for (int i = 0; i < arr1.Length; i++)
         {
-            if (arr1.Length != arr2.Length) return false;
-
-            for (int i = 0; i < arr1.Length; i++)
-            {
-                if (arr1[i] != arr2[i]) return false;
-            }
-
-            return true;
+            if (arr1[i] != arr2[i]) return false;
         }
 
-        public static ushort SwapU16(ushort value)
-        {
-            return (ushort)((value << 8) | (value >> 8));
-        }
+        return true;
+    }
 
-        public static uint SwapU32(uint value)
-        {
-            return (value << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | (value >> 24);
-        }
+    public static ushort SwapU16(ushort value)
+    {
+        return (ushort)((value << 8) | (value >> 8));
+    }
+
+    public static uint SwapU32(uint value)
+    {
+        return (value << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | (value >> 24);
     }
 }
